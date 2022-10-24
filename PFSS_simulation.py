@@ -29,6 +29,7 @@ aia_submap = restore('20140202/20140202_aia_submap')
 eis_fixed = restore('20140202/20140202_eis_map')
 aia = restore('20140202/20140202_aia_map')
 pfss_in = restore('20140202/20140202_pfss_in')
+
 hp_lon = np.linspace(eis_fixed.bottom_left_coord.Tx/u.arcsec, eis_fixed.top_right_coord.Tx/u.arcsec, len(aia_submap.data[0])) * u.arcsec
 hp_lat = np.linspace(eis_fixed.bottom_left_coord.Ty/u.arcsec, eis_fixed.top_right_coord.Ty/u.arcsec, len(aia_submap.data[0:])) * u.arcsec
 lon, lat = np.meshgrid(hp_lon, hp_lat)
@@ -37,7 +38,9 @@ seeds = SkyCoord(lon.ravel(), lat.ravel(),
 
 m = pfss_in.map
 pfss_out = pfsspy.pfss(pfss_in)
-tracer = tracing.FortranTracer(max_steps=80000, step_size=0.8)
+
+print('Currently Tracing')
+tracer = tracing.FortranTracer(max_steps=80000, step_size=0.5)
 flines = tracer.trace(seeds, pfss_out)
 
 save('20140202/20140202_flines', flines)
