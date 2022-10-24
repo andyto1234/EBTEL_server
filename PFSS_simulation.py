@@ -44,3 +44,5 @@ tracer = tracing.FortranTracer(max_steps=80000, step_size=0.65)
 flines = tracer.trace(seeds, pfss_out)
 
 save('20140202/20140202_flines', flines)
+fline_list = [i.coords for i in flines]
+save('20140202/20140202_fline_list', fline_list)
