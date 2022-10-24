@@ -40,7 +40,7 @@ m = pfss_in.map
 pfss_out = pfsspy.pfss(pfss_in)
 
 print('Currently Tracing')
-tracer = tracing.FortranTracer(max_steps=80000, step_size=0.7)
+tracer = tracing.FortranTracer(max_steps=80000, step_size=0.65)
 flines = tracer.trace(seeds, pfss_out)
 
 save('20140202/20140202_flines', flines)
