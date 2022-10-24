@@ -14,6 +14,7 @@ from astropy.visualization import ImageNormalize, quantity_support
 import eispac
 import pfsspy
 import pfsspy.tracing as tracing
+import json
 
 def save(filename, obj):
     with open(filename, 'wb') as outp:  # Overwrites any existing file.
@@ -46,3 +47,27 @@ flines = tracer.trace(seeds, pfss_out)
 save('20140202/20140202_flines', flines)
 fline_list = [i.coords for i in flines]
 save('20140202/20140202_fline_list', fline_list)
+
+def get_loop_length(line):
+    c = line.coords.cartesian.xyz
+    s = np.append(0., np.linalg.norm(np.diff(c.value, axis=1), axis=0).cumsum()) * c.unit
+    return np.diff(s).sum()
+
+gauss = []
+length = []
+
+for i in range(len(flines)):
+    gauss.append(sum((flines[i].b_along_fline[0].to_value(u.gauss))**2)**0.5)
+    length.append(get_loop_length(flines[i]).to_value(u.m))
+    
+heating = (0.0492*((29e6/np.array(length))*(np.array(gauss)/76)))
+
+for i in range(len(gauss)):
+    with open('20140202/20140202_mean_field.txt', 'a+') as outfile:  
+        outfile.write(f'{gauss[i]}\n')
+    with open('20140202/20140202_length.txt', 'a+') as outfile:  
+        outfile.write(f'{length[i]}\n')
+    with open('20140202/20140202_heating.txt', 'a+') as outfile:  
+        outfile.write(f'{heating[i]}\n')
+
+    
