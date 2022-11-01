@@ -29,7 +29,7 @@ lon, lat = np.meshgrid(hp_lon, hp_lat)
 seeds = SkyCoord(lon.ravel(), lat.ravel(),
                  frame=aia.coordinate_frame)
 
-m = pfss_in.map
+# m = pfss_in.map
 pfss_out = pfsspy.pfss(pfss_in)
 
 print('Currently Tracing')
