@@ -23,8 +23,8 @@ eis_fixed = restore(date+'eis_map')
 aia = restore(date+'aia_map')
 pfss_in = restore(date+'pfss_in')
 
-hp_lon = np.linspace(eis_fixed.bottom_left_coord.Tx/u.arcsec, eis_fixed.top_right_coord.Tx/u.arcsec, len(aia_submap.data[0])) * u.arcsec
-hp_lat = np.linspace(eis_fixed.bottom_left_coord.Ty/u.arcsec, eis_fixed.top_right_coord.Ty/u.arcsec, len(aia_submap.data[0:])) * u.arcsec
+hp_lon = np.linspace(eis_fixed.bottom_left_coord.Tx/u.arcsec, eis_fixed.top_right_coord.Tx/u.arcsec, len(eis_fixed.data[0])) * u.arcsec
+hp_lat = np.linspace(eis_fixed.bottom_left_coord.Ty/u.arcsec, eis_fixed.top_right_coord.Ty/u.arcsec, len(eis_fixed.data[0:])) * u.arcsec
 lon, lat = np.meshgrid(hp_lon, hp_lat)
 seeds = SkyCoord(lon.ravel(), lat.ravel(),
                  frame=aia.coordinate_frame)
