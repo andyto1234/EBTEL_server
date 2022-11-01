@@ -31,7 +31,7 @@ seeds = SkyCoord(lon.ravel(), lat.ravel(),
 
 # m = pfss_in.map
 
-nrho = 70
+nrho = 50
 rss = 2.5
 pfss_input = pfsspy.Input(pfss_in, nrho, rss)
 
