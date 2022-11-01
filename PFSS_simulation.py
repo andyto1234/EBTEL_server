@@ -30,6 +30,11 @@ seeds = SkyCoord(lon.ravel(), lat.ravel(),
                  frame=aia.coordinate_frame)
 
 # m = pfss_in.map
+
+nrho = 39
+rss = 2.5
+pfss_input = pfsspy.Input(pfss_in, nrho, rss)
+
 pfss_out = pfsspy.pfss(pfss_in)
 
 print('Currently Tracing')
