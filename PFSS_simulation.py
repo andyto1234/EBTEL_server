@@ -35,7 +35,7 @@ nrho = 39
 rss = 2.5
 pfss_input = pfsspy.Input(pfss_in, nrho, rss)
 
-pfss_out = pfsspy.pfss(pfss_in)
+pfss_out = pfsspy.pfss(pfss_input)
 
 print('Currently Tracing')
 tracer = tracing.FortranTracer(max_steps=80000, step_size=0.65)
