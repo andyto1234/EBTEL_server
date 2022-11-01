@@ -54,7 +54,7 @@ gauss = []
 length = []
 
 for i in range(len(flines)):
-    gauss.append(sum((flines[i].b_along_fline[0].to_value(u.gauss))**2)**0.5)
+    gauss.append(sum((flines[i].b_along_fline[0])**2)**0.5)
     length.append(get_loop_length(flines[i]).to_value(u.m))
     
 heating = (0.0492*((29e6/np.array(length))*(np.array(gauss)/76)))
