@@ -31,14 +31,14 @@ seeds = SkyCoord(lon.ravel(), lat.ravel(),
 
 # m = pfss_in.map
 
-nrho = 50
+nrho = 45
 rss = 2.5
 pfss_input = pfsspy.Input(pfss_in, nrho, rss)
 
 pfss_out = pfsspy.pfss(pfss_input)
 
 print('Currently Tracing')
-tracer = tracing.FortranTracer(max_steps=80000, step_size=0.65)
+tracer = tracing.FortranTracer(max_steps=80000, step_size=0.8)
 flines = tracer.trace(seeds, pfss_out)
 
 save(date+'flines', flines)
