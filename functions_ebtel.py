@@ -28,6 +28,16 @@ def get_var(date_string):
     
     return length, gauss, heating, flines
 
+def get_new_var(date_string):
+    with open(date_string+'intensity.txt', "r") as f:
+        intensity = f.readlines()
+        intensity = [float(l.replace('\n','')) for l in length]
+    print('Order of variables: length, gauss, heating')
+    print(f'List length of intensities: {len(intensity)}')
+    
+    return intensity
+
+
 def check_file(python_index, file_list):
     file_heating = [float('.'.join(('0',re.findall(r'\d+', i)[-2]))) for i in file_list]
     file_length = [int(re.findall(r'\d+', i)[-1]) for i in file_list]
