@@ -8,6 +8,8 @@ import re
 import sunpy
 import multiprocessing as mp
 from functools import partial
+import json
+from pathlib import Path
 
 
 def get_var(date_string):
@@ -50,17 +52,16 @@ def check_file(python_index, file_list):
     return idl_index
 
 
-def fline_multi(length, flines, aia_submap, file_list, i):
+def fline_multi(date_string, length, flines, aia_submap, file_list, i):
     try:
         if length[i] > 5e6:
             idl_index = check_file(i, file_list)
             pix_x, pix_y = filter_pix(flines[i].coords, aia_submap)
             intensity = readsav(file_list[idl_index])['int'][445]
             print(i)
-            list = [pix_x, pix_y, intensity]
-            with open(date+'intensity.txt', 'a+') as outfile:  
-                outfile.write(f'{list}\n')
-
+            dict = {'pix_x':pix_x, 'pix_y':pix_y, 'int':intensity}
+            with open(f'{date_string}simulated_intensities/{i}', 'wb') as outp:  # Overwrites any existing file.
+                pickle.dump(dict, outp, pickle.HIGHEST_PROTOCOL)
             # return pix_x, pix_y, intensity
         else:
             pass
@@ -79,9 +80,10 @@ if __name__ == "__main__":
     failed_list = []
     length, gauss, heating, flines = get_var(date)
     file_list_multi = glob.glob(date+"simulation_results/*.sav")
+    Path(f'{date}simulated_intensities/').mkdir(parents=True, exist_ok=True)
 
     with mp.Pool(processes = 50) as p:
-        fline_partial = partial(fline_multi, length, flines, aia_submap, file_list_multi)
+        fline_partial = partial(date, fline_multi, length, flines, aia_submap, file_list_multi)
         p.map(fline_partial, range(len(flines)))
     # for result in results:
     #     blank_data[result[1], result[0]] += result[2]

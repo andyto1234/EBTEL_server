@@ -62,3 +62,4 @@ def filter_pix(loop_coord, ref_map):
     pix_y = pix[:,1][(pix[:,0]>=0) & (pix[:,0]<len(ref_map.data[0,:])) & (pix[:,1]>=0) & (pix[:,1]<len(ref_map.data[:,0]))]
 
     return pix_x, pix_y
+
