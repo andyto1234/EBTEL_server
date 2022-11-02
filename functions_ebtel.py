@@ -31,7 +31,7 @@ def get_var(date_string):
 def get_new_var(date_string):
     with open(date_string+'intensity.txt', "r") as f:
         intensity = f.readlines()
-        intensity = [float(l.replace('\n','')) for l in intensity]
+        intensity = [list(l.replace('\n','')) for l in intensity]
     print('Order of variables: length, gauss, heating')
     print(f'List length of intensities: {len(intensity)}')
     
