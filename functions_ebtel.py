@@ -62,9 +62,11 @@ if __name__ == "__main__":
     failed_list = []
     length, gauss, heating, flines = get_var(date)
     file_list_multi = glob.glob(date+"simulation_results/*.sav")
+
+    fline_partial = partial(fline_multi, length, flines, aia_submap, file_list_multi)
     results = []
     with mp.Pool(50) as p:
-        with tqdm.tqdm(total=len(flines)) as pbar:
+        with tqdm(total=len(flines)) as pbar:
             for result in p.imap(fline_partial, range(len(flines))):
                 results.append(result)
                 pbar.update()
