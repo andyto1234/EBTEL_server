@@ -10,6 +10,7 @@ import multiprocessing as mp
 from functools import partial
 import json
 from pathlib import Path
+from datetime import datetime
 
 
 def get_var(date_string):
@@ -82,9 +83,12 @@ if __name__ == "__main__":
     file_list_multi = glob.glob(date+"simulation_results/*.sav")
     Path(f'{date}simulated_intensities/').mkdir(parents=True, exist_ok=True)
 
+    start=datetime.now()
     with mp.Pool(processes = 50) as p:
         fline_partial = partial(fline_multi, date, length, flines, aia_submap, file_list_multi)
         p.map(fline_partial, range(len(flines)))
+    print(datetime.now()-start)
+
     # for result in results:
     #     blank_data[result[1], result[0]] += result[2]
 
