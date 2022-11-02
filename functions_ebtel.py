@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     with mp.Pool(50) as p:
         fline_partial = partial(fline_multi, length, flines, aia_submap, file_list_multi)
-        results = p.map(fline_partial, range(len(flines)))
+        results = tqdm(p.map(fline_partial, range(len(flines))),total=len(flines))
     for result in results:
         blank_data[result[1], result[0]] += result[2]
 
