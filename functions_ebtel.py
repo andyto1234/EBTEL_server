@@ -42,7 +42,7 @@ def check_file(python_index, file_list):
 
 def fline_multi(length, flines, aia_submap, file_list, i):
     if length[i] > 5e6:
-        idl_index = check_file(i)
+        idl_index = check_file(i, file_list)
         pix_x, pix_y = filter_pix(flines[i].coords, aia_submap)
         intensity = readsav(file_list[idl_index])['int'][445]
         print(i)
