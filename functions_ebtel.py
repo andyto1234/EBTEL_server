@@ -7,13 +7,6 @@ import glob
 import re
 import sunpy
 
-date = '20110415/'
-aia_submap = restore(date+'aia_submap')
-eis_fixed = restore(date+'eis_map')
-aia = restore(date+'aia_map')
-pfss_in = restore(date+'pfss_in')
-
-
 def get_var(date_string):
     with open(date_string+'length.txt', "r") as f:
         length = f.readlines()
@@ -43,20 +36,28 @@ def check_file(python_index, file_list):
     # print(f'real length: {length_a[python_index]}, idl length:{file_length[idl_index]}')
     return idl_index
 
-blank_data = np.zeros(len(eis_fixed.data[0:])*len(eis_fixed.data[0])).reshape(len(eis_fixed.data[0:]),len(eis_fixed.data[0]))
-failed_list = []
-length, gauss, heating, flines = get_var(date)
-file_list = glob.glob(date+"simulation_results/*.sav")
-# blank_data[pix_y, pix_x] = 10000
-for i in tqdm(range(len(flines))):
-    if length[i] > 5e6:
-        idl_index = check_file(i, file_list)
-        try:
-            pix_x, pix_y = filter_pix(flines[i].coords, eis_fixed)
-            blank_data[pix_y, pix_x] += readsav(file_list[idl_index])['int'][400]
-        except:
-            failed_list.append(i)
 
-synth_map = sunpy.map.Map(blank_data, eis_fixed.meta)
-save(date+'synth_eis', synth_map)
-save(date+'failed_list', failed_list)
+if __name__ == "__main__":
+    date = '20110415/'
+    aia_submap = restore(date+'aia_submap')
+    eis_fixed = restore(date+'eis_map')
+    aia = restore(date+'aia_map')
+    pfss_in = restore(date+'pfss_in')
+    
+    blank_data = np.zeros(len(eis_fixed.data[0:])*len(eis_fixed.data[0])).reshape(len(eis_fixed.data[0:]),len(eis_fixed.data[0]))
+    failed_list = []
+    length, gauss, heating, flines = get_var(date)
+    file_list = glob.glob(date+"simulation_results/*.sav")
+    # blank_data[pix_y, pix_x] = 10000
+    for i in tqdm(range(len(flines))):
+        if length[i] > 5e6:
+            idl_index = check_file(i, file_list)
+            try:
+                pix_x, pix_y = filter_pix(flines[i].coords, eis_fixed)
+                blank_data[pix_y, pix_x] += readsav(file_list[idl_index])['int'][400]
+            except:
+                failed_list.append(i)
+
+    synth_map = sunpy.map.Map(blank_data, eis_fixed.meta)
+    save(date+'synth_eis', synth_map)
+    save(date+'failed_list', failed_list)
