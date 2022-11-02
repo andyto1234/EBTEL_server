@@ -6,6 +6,9 @@ from scipy.io import readsav
 import glob
 import re
 import sunpy
+import multiprocessing as mp
+from functools import partial
+
 
 def get_var(date_string):
     with open(date_string+'length.txt', "r") as f:
@@ -37,27 +40,44 @@ def check_file(python_index, file_list):
     return idl_index
 
 
+def fline_multi(length, flines, aia_submap, file_list, i):
+    if length[i] > 5e6:
+        idl_index = check_file(i)
+        pix_x, pix_y = filter_pix(flines[i].coords, aia_submap)
+        intensity = readsav(file_list[idl_index])['int'][445]
+        print(i)
+        return pix_x, pix_y, intensity
+    else:
+        pass
+
+
 if __name__ == "__main__":
     date = '20110415/'
     aia_submap = restore(date+'aia_submap')
     eis_fixed = restore(date+'eis_map')
     aia = restore(date+'aia_map')
     pfss_in = restore(date+'pfss_in')
-    
+
     blank_data = np.zeros(len(eis_fixed.data[0:])*len(eis_fixed.data[0])).reshape(len(eis_fixed.data[0:]),len(eis_fixed.data[0]))
     failed_list = []
     length, gauss, heating, flines = get_var(date)
-    file_list = glob.glob(date+"simulation_results/*.sav")
-    # blank_data[pix_y, pix_x] = 10000
-    for i in tqdm(range(len(flines))):
-        if length[i] > 5e6:
-            idl_index = check_file(i, file_list)
-            try:
-                pix_x, pix_y = filter_pix(flines[i].coords, eis_fixed)
-                blank_data[pix_y, pix_x] += readsav(file_list[idl_index])['int'][400]
-            except:
-                failed_list.append(i)
+    file_list_multi = glob.glob(date+"simulation_results/*.sav")
 
-    synth_map = sunpy.map.Map(blank_data, eis_fixed.meta)
-    save(date+'synth_eis', synth_map)
-    save(date+'failed_list', failed_list)
+    with mp.Pool(50) as p:
+        fline_partial = partial(fline_multi, length, flines, aia_submap, file_list_multi)
+        results = list(tqdm(p.imap(fline_partial, range(len(flines))),total = len(flines)))
+    for result in results:
+        blank_data[result[1], result[0]] += result[2]
+
+    # for i in tqdm(range(len(flines))):
+    #     if length[i] > 5e6:
+    #         idl_index = check_file(i, file_list)
+    #         try:
+    #             pix_x, pix_y = filter_pix(flines[i].coords, eis_fixed)
+    #             blank_data[pix_y, pix_x] += readsav(file_list[idl_index])['int'][400]
+    #         except:
+    #             failed_list.append(i)
+
+    synth_map_multi = sunpy.map.Map(blank_data, eis_fixed.meta)
+    save(date+'synth_eis', synth_map_multi)
+    save(date+'failed_list', file_list_multi)
