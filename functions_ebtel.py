@@ -46,6 +46,7 @@ def fline_multi(length, flines, aia_submap, file_list, i):
             idl_index = check_file(i, file_list)
             pix_x, pix_y = filter_pix(flines[i].coords, aia_submap)
             intensity = readsav(file_list[idl_index])['int'][445]
+            print(i)
             list = [pix_x, pix_y, intensity]
             with open(date+'intensity.txt', 'a+') as outfile:  
                 outfile.write(f'{list}\n')
