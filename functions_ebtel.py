@@ -46,8 +46,11 @@ def fline_multi(length, flines, aia_submap, file_list, i):
             idl_index = check_file(i, file_list)
             pix_x, pix_y = filter_pix(flines[i].coords, aia_submap)
             intensity = readsav(file_list[idl_index])['int'][445]
-            print(i)
-            return pix_x, pix_y, intensity
+            list = [pix_x, pix_y, intensity]
+            with open(date+'intensity.txt', 'a+') as outfile:  
+                outfile.write(f'{list}\n')
+
+            # return pix_x, pix_y, intensity
         else:
             pass
     except:
@@ -68,9 +71,9 @@ if __name__ == "__main__":
 
     with mp.Pool(processes = 50) as p:
         fline_partial = partial(fline_multi, length, flines, aia_submap, file_list_multi)
-        results = p.map(fline_partial, range(len(flines)))
-    for result in results:
-        blank_data[result[1], result[0]] += result[2]
+        p.map(fline_partial, range(len(flines)))
+    # for result in results:
+    #     blank_data[result[1], result[0]] += result[2]
 
     # for i in tqdm(range(len(flines))):
     #     if length[i] > 5e6:
