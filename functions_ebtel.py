@@ -83,7 +83,7 @@ if __name__ == "__main__":
     Path(f'{date}simulated_intensities/').mkdir(parents=True, exist_ok=True)
 
     with mp.Pool(processes = 50) as p:
-        fline_partial = partial(date, fline_multi, length, flines, aia_submap, file_list_multi)
+        fline_partial = partial(fline_multi, date, length, flines, aia_submap, file_list_multi)
         p.map(fline_partial, range(len(flines)))
     # for result in results:
     #     blank_data[result[1], result[0]] += result[2]
