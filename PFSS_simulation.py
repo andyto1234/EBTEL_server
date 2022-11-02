@@ -16,6 +16,7 @@ import pfsspy
 import pfsspy.tracing as tracing
 import json
 from functions_pickle import *
+from tqdm import tqdm
 
 date = '20110415/'
 aia_submap = restore(date+'aia_submap')
@@ -53,7 +54,7 @@ def get_loop_length(line):
 gauss = []
 length = []
 
-for i in range(len(flines)):
+for i in tqdm(range(len(flines))):
     gauss.append(sum((flines[i].b_along_fline[0])**2)**0.5)
     length.append(get_loop_length(flines[i]).to_value(u.m))
     
@@ -69,3 +70,15 @@ for i in range(len(gauss)):
 
 print('finished writing into txt file')
     
+
+blank_data = np.zeros(len(eis_fixed.data[0:])*len(eis_fixed.data[0])).reshape(len(eis_fixed.data[0:]),len(eis_fixed.data[0]))
+failed_list = []
+# blank_data[pix_y, pix_x] = 10000
+for i in tqdm(range(len(flines))):
+    if length[i] > 5e6:
+        idl_index = check_file(i)
+        try:
+            pix_x, pix_y = filter_pix(flines[i].coords, eis_fixed)
+            blank_data[pix_y, pix_x] += readsav(file_list[idl_index])['int'][400]
+        except:
+            failed_list.append(i)
