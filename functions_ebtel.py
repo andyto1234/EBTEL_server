@@ -73,18 +73,20 @@ def synthetic_map(blank_array, date):
     files_intensity = glob.glob(date+"simulated_intensities/*")
     for file in tqdm(files_intensity):
         dict = restore(file)
-        blank_array[dict['pix_x'], dict['pix_y']] += dict['int']
+        blank_array[dict['pix_y'], dict['pix_x']] += dict['int']
     return blank_array
 
 
 if __name__ == "__main__":
-    date = '20110415/'
-    aia_submap = restore(date+'aia_submap')
-    eis_fixed = restore(date+'eis_map')
-    aia = restore(date+'aia_map')
-    pfss_in = restore(date+'pfss_in')
-
-    blank_data = np.zeros(len(eis_fixed.data[0:])*len(eis_fixed.data[0])).reshape(len(eis_fixed.data[0:]),len(eis_fixed.data[0]))
+date = '20110415/'
+aia_submap = restore(date+'aia_submap')
+eis_fixed = restore(date+'eis_map')
+aia = restore(date+'aia_map')
+pfss_in = restore(date+'pfss_in')
+"""
+change this later - aia_submap to eis_fixed
+"""
+blank_data = np.zeros(len(aia_submap.data[0:])*len(aia_submap.data[0])).reshape(len(aia_submap.data[0:]),len(aia_submap.data[0]))
     failed_list = []
     length, gauss, heating, flines = get_var(date)
     file_list_multi = glob.glob(date+"simulation_results/*.sav")
