@@ -76,6 +76,13 @@ def synthetic_map(blank_array, date):
         blank_array[dict['pix_y'], dict['pix_x']] += dict['int']
     return blank_array
 
+def inf_check(date):
+    files_intensity = glob.glob(date+"simulated_intensities/*")
+    int_list=[]
+    for file in tqdm(files_intensity):
+        dict = restore(file)
+        int_list.append(dict['int'])
+    return int_list
 
 if __name__ == "__main__":
     date = '20110415/'
@@ -98,6 +105,8 @@ if __name__ == "__main__":
         p.map(fline_partial, range(len(flines)))
     print(datetime.now()-start)
 
+    blank_data = synthetic_map(blank_data, date)
+
     # for result in results:
     #     blank_data[result[1], result[0]] += result[2]
 
@@ -110,6 +119,6 @@ if __name__ == "__main__":
     #         except:
     #             failed_list.append(i)
 
-    synth_map_multi = sunpy.map.Map(blank_data, eis_fixed.meta)
+    synth_map_multi = sunpy.map.Map(blank_data, aia_submap.meta)
     save(date+'synth_eis', synth_map_multi)
     save(date+'failed_list', file_list_multi)
