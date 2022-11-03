@@ -73,8 +73,8 @@ def synthetic_map(blank_array, date):
     files_intensity = glob.glob(date+"simulated_intensities/*.sav")
     for file in tqdm(files_intensity):
         dict = restore(file)
-        blank_data[dict['pix_x'], dict['pix_y']] += dict['int']
-    return blank_data
+        blank_array[dict['pix_x'], dict['pix_y']] += dict['int']
+    return blank_array
 
 
 if __name__ == "__main__":
