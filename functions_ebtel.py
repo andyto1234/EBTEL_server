@@ -73,7 +73,10 @@ def synthetic_map(blank_array, date):
     files_intensity = glob.glob(date+"simulated_intensities/*")
     for file in tqdm(files_intensity):
         dict = restore(file)
-        blank_array[dict['pix_y'], dict['pix_x']] += dict['int']
+        if dict['int'] != np.inf:
+            blank_array[dict['pix_y'], dict['pix_x']] += dict['int']
+        else:
+            pass
     return blank_array
 
 def inf_check(date):
