@@ -78,15 +78,15 @@ def synthetic_map(blank_array, date):
 
 
 if __name__ == "__main__":
-date = '20110415/'
-aia_submap = restore(date+'aia_submap')
-eis_fixed = restore(date+'eis_map')
-aia = restore(date+'aia_map')
-pfss_in = restore(date+'pfss_in')
-"""
-change this later - aia_submap to eis_fixed
-"""
-blank_data = np.zeros(len(aia_submap.data[0:])*len(aia_submap.data[0])).reshape(len(aia_submap.data[0:]),len(aia_submap.data[0]))
+    date = '20110415/'
+    aia_submap = restore(date+'aia_submap')
+    eis_fixed = restore(date+'eis_map')
+    aia = restore(date+'aia_map')
+    pfss_in = restore(date+'pfss_in')
+    """
+    change this later - aia_submap to eis_fixed
+    """
+    blank_data = np.zeros(len(aia_submap.data[0:])*len(aia_submap.data[0])).reshape(len(aia_submap.data[0:]),len(aia_submap.data[0]))
     failed_list = []
     length, gauss, heating, flines = get_var(date)
     file_list_multi = glob.glob(date+"simulation_results/*.sav")
