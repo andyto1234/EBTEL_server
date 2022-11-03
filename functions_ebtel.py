@@ -69,6 +69,13 @@ def fline_multi(date_string, length, flines, aia_submap, file_list, i):
     except:
         pass
 
+def synthetic_map(blank_array, date):
+    files_intensity = glob.glob(date+"simulated_intensities/*.sav")
+    for file in tqdm(files_intensity):
+        dict = restore(file)
+        blank_data[dict['pix_x'], dict['pix_y']] += dict['int']
+    return blank_data
+
 
 if __name__ == "__main__":
     date = '20110415/'
