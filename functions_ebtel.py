@@ -70,7 +70,7 @@ def fline_multi(date_string, length, flines, aia_submap, file_list, i):
         pass
 
 def synthetic_map(blank_array, date):
-    files_intensity = glob.glob(date+"simulated_intensities/*.sav")
+    files_intensity = glob.glob(date+"simulated_intensities/*")
     for file in tqdm(files_intensity):
         dict = restore(file)
         blank_array[dict['pix_x'], dict['pix_y']] += dict['int']
