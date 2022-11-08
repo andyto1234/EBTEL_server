@@ -17,12 +17,17 @@ import pfsspy.tracing as tracing
 import json
 from functions_pickle import *
 from tqdm import tqdm
+from ebtel_adapt import adapt2pfsspy
+from glob import glob
+
 
 date = '20110415/'
 aia_submap = restore(date+'aia_submap')
 eis_fixed = restore(date+'eis_map')
 aia = restore(date+'aia_map')
 pfss_in = restore(date+'pfss_in')
+adapt_map = glob(date+'adapt*')[0]
+
 
 hp_lon = np.linspace(eis_fixed.bottom_left_coord.Tx/u.arcsec, eis_fixed.top_right_coord.Tx/u.arcsec, len(eis_fixed.data[0])) * u.arcsec
 hp_lat = np.linspace(eis_fixed.bottom_left_coord.Ty/u.arcsec, eis_fixed.top_right_coord.Ty/u.arcsec, len(eis_fixed.data[0:])) * u.arcsec
@@ -30,7 +35,7 @@ lon, lat = np.meshgrid(hp_lon, hp_lat)
 seeds = SkyCoord(lon.ravel(), lat.ravel(),
                  frame=aia.coordinate_frame)
 
-# m = pfss_in.map
+pfss_model = adapt2pfsspy(adapt_map,rss=2.5)
 
 nrho = 45
 rss = 2.5
@@ -60,6 +65,7 @@ for i in tqdm(range(len(flines))):
     
 heating = (0.0492*((29e6/np.array(length))*(np.array(gauss)/76)))
 
+
 for i in range(len(gauss)):
     with open(date+'mean_field.txt', 'a+') as outfile:  
         outfile.write(f'{gauss[i]}\n')
@@ -71,14 +77,3 @@ for i in range(len(gauss)):
 print('finished writing into txt file')
     
 
-blank_data = np.zeros(len(eis_fixed.data[0:])*len(eis_fixed.data[0])).reshape(len(eis_fixed.data[0:]),len(eis_fixed.data[0]))
-failed_list = []
-# blank_data[pix_y, pix_x] = 10000
-for i in tqdm(range(len(flines))):
-    if length[i] > 5e6:
-        idl_index = check_file(i)
-        try:
-            pix_x, pix_y = filter_pix(flines[i].coords, eis_fixed)
-            blank_data[pix_y, pix_x] += readsav(file_list[idl_index])['int'][400]
-        except:
-            failed_list.append(i)
