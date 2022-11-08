@@ -37,15 +37,15 @@ seeds = SkyCoord(lon.ravel(), lat.ravel(),
 
 pfss_model = adapt2pfsspy(adapt_map,rss=2.5)
 
-nrho = 45
-rss = 2.5
-pfss_input = pfsspy.Input(pfss_in, nrho, rss)
+# nrho = 45
+# rss = 2.5
+# pfss_input = pfsspy.Input(pfss_in, nrho, rss)
 
-pfss_out = pfsspy.pfss(pfss_input)
+# pfss_out = pfsspy.pfss(pfss_input)
 
 print('Currently Tracing')
-tracer = tracing.FortranTracer(max_steps=80000, step_size=0.8)
-flines = tracer.trace(seeds, pfss_out)
+tracer = pfsspy.tracing.FortranTracer(max_steps=80000, step_size=0.8)
+flines = tracer.trace(seeds, pfss_model)
 
 save(date+'flines', flines)
 fline_list = [i.coords for i in flines]
@@ -60,7 +60,7 @@ gauss = []
 length = []
 
 for i in tqdm(range(len(flines))):
-    gauss.append(sum((flines[i].b_along_fline[0])**2)**0.5)
+    gauss.append(np.mean([sum(b**2)**0.5 for b in flines[i].b_along_fline]))
     length.append(get_loop_length(flines[i]).to_value(u.m))
     
 heating = (0.0492*((29e6/np.array(length))*(np.array(gauss)/76)))
