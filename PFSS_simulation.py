@@ -51,6 +51,8 @@ save(date+'flines', flines)
 fline_list = [i.coords for i in flines]
 save(date+'fline_list', fline_list)
 
+print('Tracing Finished')
+
 def get_loop_length(line):
     c = line.coords.cartesian.xyz
     s = np.append(0., np.linalg.norm(np.diff(c.value, axis=1), axis=0).cumsum()) * c.unit
@@ -59,13 +61,14 @@ def get_loop_length(line):
 gauss = []
 length = []
 
+print(f'Compiling list for {len(flines)} B-fields and loop lengths')
+
 for i in tqdm(range(len(flines))):
     gauss.append(np.mean([sum(b**2)**0.5 for b in flines[i].b_along_fline]))
     length.append(get_loop_length(flines[i]).to_value(u.m))
-    
+
+print(f'Average loop b-field: {np.mean(gauss)}; length: {np.mean(length)/1e6}')
 heating = (0.0492*((29e6/np.array(length))*(np.array(gauss)/76)))
-
-
 for i in range(len(gauss)):
     with open(date+'mean_field.txt', 'a+') as outfile:  
         outfile.write(f'{gauss[i]}\n')

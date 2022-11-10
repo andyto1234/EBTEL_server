@@ -97,7 +97,6 @@ if __name__ == "__main__":
     change this later - aia_submap to eis_fixed
     """
     blank_data = np.zeros(len(aia_submap.data[0:])*len(aia_submap.data[0])).reshape(len(aia_submap.data[0:]),len(aia_submap.data[0]))
-    failed_list = []
     length, gauss, heating, flines = get_var(date)
     file_list_multi = glob.glob(date+"simulation_results/*.sav")
     Path(f'{date}simulated_intensities/').mkdir(parents=True, exist_ok=True)
@@ -124,4 +123,3 @@ if __name__ == "__main__":
 
     synth_map_multi = sunpy.map.Map(blank_data, aia_submap.meta)
     save(date+'synth_eis', synth_map_multi)
-    save(date+'failed_list', file_list_multi)
