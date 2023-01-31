@@ -1,4 +1,10 @@
-import pickle
+import platform
+if platform.python_version() == '3.7.12':
+    import pickle5 as pickle
+else:
+    import pickle
+
+    
 
 def save(filename, obj):
     with open(filename, 'wb') as outp:  # Overwrites any existing file.

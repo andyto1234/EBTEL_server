@@ -8,9 +8,7 @@ import matplotlib.pyplot as plt
 import pfsspy
 import sunpy
 from tqdm import tqdm
-
 from aiapy.calibrate import correct_degradation, update_pointing
-
 from astropy.coordinates import SkyCoord
 from sunpy.net import Fido,attrs
 
