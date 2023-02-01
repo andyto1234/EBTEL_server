@@ -69,8 +69,8 @@ tracer = pfsspy.tracing.FortranTracer(step_size=ds, max_steps=max_steps)
 fieldlines = tracer.trace(SkyCoord(seeds), pfss_output,)
 
 save(date+'flines.pickles', fieldlines)
-fline_list_closed = [i.coords for i in fieldlines.closed_field_lines()]
-fline_list_open = [i.coords for i in fieldlines.open_field_lines()]
+fline_list_closed = [i.coords for i in fieldlines.closed_field_lines]
+fline_list_open = [i.coords for i in fieldlines.open_field_lines]
 save(date+'fline_list_closed.pickles', fline_list_closed)
 save(date+'fline_list_open.pickles', fline_list_open)
 
