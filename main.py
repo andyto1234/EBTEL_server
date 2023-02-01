@@ -82,29 +82,30 @@ def get_loop_length(line):
     s = np.append(0., np.linalg.norm(np.diff(c.value, axis=1), axis=0).cumsum())
     return np.diff(s).sum()
 
-gauss = []
-length = []
-
 print(f'Compiling list for {len(fieldlines)} B-fields and loop lengths')
 
 def get_ebtel_param(fline_list,description):
     print(f'Working on {description}')
-    for i in tqdm(fline_list):
+    gauss = []
+    length = []
+    for i in tqdm(fline_list, desc="Curating Loop Length & Field Strength"):
         if len(i) > 0:
             data = np.sqrt(np.nansum(np.square(pfss_output.get_bvec(i)),axis=1))
             data[data == 0] = np.nan
             gauss.append(np.nanmean(data))
             length.append(get_loop_length(i))
 
-    print(f'{description} : Average loop b-field: {np.mean(gauss)}; length: {np.mean(length)/1e6}')
     heating = (0.0492*((29e6/np.array(length))*(np.array(gauss)/76)))
-    for i in tqdm(range(len(gauss))):
+    print(f'Sanity Check: Gauss array length:{len(gauss)}; Length array length:{len(length)}\n; Heating array length:{len(heating)}')
+
+    for i in tqdm(range(len(heating)), desc="Writing EBTEL parameters"):
         with open(date+f'mean_field_{description}.txt', 'a+') as outfile:  
             outfile.write(f'{gauss[i]}\n')
         with open(date+f'length_{description}.txt', 'a+') as outfile:  
             outfile.write(f'{length[i]}\n')
         with open(date+f'heating_{description}.txt', 'a+') as outfile:  
             outfile.write(f'{heating[i]}\n')
+    print(f'{description} : Average loop b-field: {np.mean(gauss)}; length: {np.mean(length)/1e6}')
 
 get_ebtel_param(fline_list_closed,'closed')
 get_ebtel_param(fline_list_open,'open')
