@@ -31,7 +31,7 @@ ar_width = 600*u.arcsec
 ar_height = 600*u.arcsec
 
 # Resample PFSS
-m_hmi_resample = m_hmi.resample((450, 270)*u.pix)
+m_hmi_resample = m_hmi.resample((1800, 1080)*u.pix)
 
 # Setting parameters for PFSSpy
 print('Setting parameters for PFSSpy')
@@ -90,7 +90,7 @@ def get_ebtel_param(fline_list,description):
     print(f'Working on {description}')
     for i in tqdm(fline_list):
         if len(i) > 0:
-            data = np.sqrt(np.nansum(np.square(pfss_output.get_bvec(fline_list)),axis=1))
+            data = np.sqrt(np.nansum(np.square(pfss_output.get_bvec(i)),axis=1))
             data[data == 0] = np.nan
             gauss.append(np.nanmean(data))
             length.append(get_loop_length(i))
