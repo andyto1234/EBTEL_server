@@ -11,11 +11,11 @@ from tqdm import tqdm
 from aiapy.calibrate import correct_degradation, update_pointing
 from astropy.coordinates import SkyCoord
 from sunpy.net import Fido,attrs
-from sys import setrecursionlimit
+# from sys import setrecursionlimit
 import faulthandler
 faulthandler.enable()
 
-setrecursionlimit(10**6) 
+# setrecursionlimit(10**6) 
 change_obstime = lambda x,y: SkyCoord(x.replicate(observer=x.observer.replicate(obstime=y), obstime=y))
 change_obstime_frame = lambda x,y: x.replicate_without_data(observer=x.observer.replicate(obstime=y), obstime=y)
 
@@ -60,7 +60,7 @@ seeds = seeds[np.where(np.logical_and(in_lon, in_lat))]
 
 # Setting parameters for the PFSS tracer
 ds = 0.01
-max_steps = int(np.ceil(10 * nrho / ds))*2
+max_steps = int(np.ceil(10 * nrho / ds))
 
 # Tracing PFSS fieldlines
 print('Currently Tracing')
