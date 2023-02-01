@@ -89,7 +89,7 @@ print(f'Compiling list for {len(fieldlines)} B-fields and loop lengths')
 def get_ebtel_param(fline_list,description):
     print(f'Working on {description}')
     for i in tqdm(fline_list):
-        if len(i.coords) > 0:
+        if len(i) > 0:
             data = np.sqrt(np.nansum(np.square(pfss_output.get_bvec(fline_list)),axis=1))
             data[data == 0] = np.nan
             gauss.append(np.nanmean(data))
