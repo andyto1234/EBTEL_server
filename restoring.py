@@ -31,24 +31,24 @@ print(f'Compiling list for {len(fieldlines)} B-fields and loop lengths')
 
 def get_ebtel_param(fline_list,description):
     print(f'Working on {description}')
+    gauss = []
+    length = []
     for i in tqdm(fline_list):
-        gauss = []
-        length = []
         if len(i) > 0:
             data = np.sqrt(np.nansum(np.square(pfss_output.get_bvec(i)),axis=1))
             data[data == 0] = np.nan
             gauss.append(np.nanmean(data))
             length.append(get_loop_length(i))
 
-        print(f'{description} : Average loop b-field: {np.mean(gauss)}; length: {np.mean(length)/1e6}')
-        heating = (0.0492*((29e6/np.array(length))*(np.array(gauss)/76)))
-        for i in tqdm(range(len(gauss))):
-            with open(date+f'mean_field_{description}.txt', 'a+') as outfile:  
-                outfile.write(f'{gauss[i]}\n')
-            with open(date+f'length_{description}.txt', 'a+') as outfile:  
-                outfile.write(f'{length[i]}\n')
-            with open(date+f'heating_{description}.txt', 'a+') as outfile:  
-                outfile.write(f'{heating[i]}\n')
+    print(f'{description} : Average loop b-field: {np.mean(gauss)}; length: {np.mean(length)/1e6}')
+    heating = (0.0492*((29e6/np.array(length))*(np.array(gauss)/76)))
+    for i in tqdm(range(len(gauss))):
+        with open(date+f'mean_field_{description}.txt', 'a+') as outfile:  
+            outfile.write(f'{gauss[i]}\n')
+        with open(date+f'length_{description}.txt', 'a+') as outfile:  
+            outfile.write(f'{length[i]}\n')
+        with open(date+f'heating_{description}.txt', 'a+') as outfile:  
+            outfile.write(f'{heating[i]}\n')
 
 get_ebtel_param(fline_list_closed,'closed')
 get_ebtel_param(fline_list_open,'open')
