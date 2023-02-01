@@ -29,7 +29,7 @@ ar_width = 600*u.arcsec
 ar_height = 600*u.arcsec
 
 # Resample PFSS
-m_hmi_resample = m_hmi.resample((1800, 1080)*u.pix)
+m_hmi_resample = m_hmi.resample((1400, 900)*u.pix)
 
 # Setting parameters for PFSSpy
 print('Setting parameters for PFSSpy')
@@ -38,6 +38,8 @@ rss = 2
 
 # PFSS input map and output PFSS format
 pfss_input = pfsspy.Input(m_hmi_resample, nrho, rss)
+
+print('Setting PFSS output')
 pfss_output = pfsspy.pfss(pfss_input)
 
 # Locating seeds using AIA cutout
