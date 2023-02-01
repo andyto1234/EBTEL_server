@@ -31,7 +31,7 @@ ar_width = 600*u.arcsec
 ar_height = 600*u.arcsec
 
 # Resample PFSS
-m_hmi_resample = m_hmi.resample((2700, 1620)*u.pix)
+m_hmi_resample = m_hmi.resample((1800, 1080)*u.pix)
 
 # Setting parameters for PFSSpy
 print('Setting parameters for PFSSpy')
