@@ -31,7 +31,7 @@ ar_width = 600*u.arcsec
 ar_height = 600*u.arcsec
 
 # Resample PFSS
-m_hmi_resample = m_hmi.resample((1800, 1080)*u.pix)
+m_hmi_resample = m_hmi.resample((2700, 1620)*u.pix)
 
 # Setting parameters for PFSSpy
 print('Setting parameters for PFSSpy')
@@ -43,6 +43,7 @@ pfss_input = pfsspy.Input(m_hmi_resample, nrho, rss)
 
 print('Setting PFSS output')
 pfss_output = pfsspy.pfss(pfss_input)
+save(f"{date}pfss_output.pickle", pfss_output)
 
 # Locating seeds using AIA cutout
 new_frame = change_obstime_frame(m_hmi.coordinate_frame, m_cutout.date)
@@ -77,8 +78,8 @@ save(date+'fline_list_open.pickles', fline_list_open)
 print('Tracing Finished')
 
 def get_loop_length(line):
-    c = line.coords.cartesian.xyz
-    s = np.append(0., np.linalg.norm(np.diff(c.value, axis=1), axis=0).cumsum()) * c.unit
+    c = line.cartesian.xyz
+    s = np.append(0., np.linalg.norm(np.diff(c.value, axis=1), axis=0).cumsum())
     return np.diff(s).sum()
 
 gauss = []
