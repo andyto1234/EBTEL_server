@@ -31,7 +31,7 @@ ar_width = 600*u.arcsec
 ar_height = 600*u.arcsec
 
 # Resample PFSS
-m_hmi_resample = m_hmi.resample((1800, 1080)*u.pix)
+m_hmi_resample = m_hmi.resample((1800, 1080 )*u.pix)
 
 # Setting parameters for PFSSpy
 print('Setting parameters for PFSSpy')
@@ -71,7 +71,7 @@ fieldlines = tracer.trace(SkyCoord(seeds), pfss_output,)
 
 save(date+'flines.pickles', fieldlines)
 fline_list_closed = [i.coords for i in fieldlines.closed_field_lines]
-fline_list_open = [i.coords for i in fieldlines.open_field_lines]
+fline_list_open = [j.coords for j in fieldlines.open_field_lines]
 save(date+'fline_list_closed.pickles', fline_list_closed)
 save(date+'fline_list_open.pickles', fline_list_open)
 
