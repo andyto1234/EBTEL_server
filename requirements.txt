@@ -1,0 +1,11 @@
+aiapy==0.7.1
+astropy==5.2
+eispac==0.94.1
+matplotlib==3.6.2
+numpy==1.24.1
+pfsspy==1.1.2
+pickle5==0.0.12
+reproject==0.9.1
+scipy==1.10.0
+sunpy==4.1.0
+tqdm==4.64.1
