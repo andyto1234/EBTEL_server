@@ -107,8 +107,8 @@ if __name__ == "__main__":
     Path(f'{date}simulated_intensities/').mkdir(parents=True, exist_ok=True)
 
     start=datetime.now()
-    print('Spreading process into multiple cores')
     fline_partial = partial(fline_multi, date, length, flines, aia_submap, file_list_multi)
+    print('Spreading process into multiple cores')
     with mp.Pool(processes = 40) as p:
         p.map(fline_partial, range(len(flines)))
     print(datetime.now()-start)
