@@ -14,16 +14,16 @@ from pathlib import Path
 from datetime import datetime
 
 
-def get_var(date_string):
-    with open(date_string+'length.txt', "r") as f:
+def get_var(date_string, description):
+    with open(date_string+f'length_{description}.txt', "r") as f:
         length = f.readlines()
         length = [float(l.replace('\n','')) for l in length]
 
-    with open(date_string+'mean_field.txt', "r") as f:
+    with open(date_string+f'mean_field_{description}.txt', "r") as f:
         gauss = f.readlines()
         gauss = [float(l.replace('\n','')) for l in gauss]
 
-    with open(date_string+'heating.txt', "r") as f:
+    with open(date_string+f'heating_{description}.txt', "r") as f:
         heating = f.readlines()
         heating = [float(l.replace('\n','')) for l in heating]
     flines = restore(date_string+'flines')
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     change this later - aia_submap to eis_fixed
     """
     blank_data = np.zeros(len(aia_submap.data[0:])*len(aia_submap.data[0])).reshape(len(aia_submap.data[0:]),len(aia_submap.data[0]))
-    length, gauss, heating, flines = get_var(date)
+    length, gauss, heating, flines = get_var(date, 'total')
     file_list_multi = glob.glob(date+"simulation_results/*.sav")
     Path(f'{date}simulated_intensities/').mkdir(parents=True, exist_ok=True)
 

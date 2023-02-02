@@ -66,7 +66,7 @@ gauss_open, length_open, heating_open = get_ebtel_param(fline_list_open,'open')
 
 gauss_total = gauss_closed + gauss_open
 length_total = length_closed + length_open
-heating_total = heating_closed + heating_open
+heating_total = list(heating_closed) + list(heating_open)
 
 for i in tqdm(range(len(gauss_total)), desc="combining two lists of EBTEL parameters"):
     with open(date+f'mean_field_total.txt', 'a+') as outfile:  
