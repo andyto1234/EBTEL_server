@@ -41,6 +41,8 @@ def get_ebtel_param(fline_list,description):
             length.append(get_loop_length(i))
 
     heating = (0.0492*((29e6/np.array(length))*(np.array(gauss)/76)))
+    print(f'Sanity Check: Gauss array length:{len(gauss)}; Length array length:{len(length)}; Heating array length:{len(heating)}')
+
     for i in tqdm(range(len(gauss)), desc="Writing EBTEL parameters"):
         with open(date+f'mean_field_{description}.txt', 'a+') as outfile:  
             outfile.write(f'{gauss[i]}\n')
