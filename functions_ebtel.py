@@ -108,8 +108,8 @@ if __name__ == "__main__":
 
     start=datetime.now()
     print('Spreading process into multiple cores')
+    fline_partial = partial(fline_multi, date, length, flines, aia_submap, file_list_multi)
     with mp.Pool(processes = 40) as p:
-        fline_partial = partial(fline_multi, date, length, flines, aia_submap, file_list_multi)
         p.map(fline_partial, range(len(flines)))
     print(datetime.now()-start)
 
