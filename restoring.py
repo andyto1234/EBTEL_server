@@ -59,8 +59,19 @@ def get_ebtel_param(fline_list,description):
         with open(date+f'heating_{description}.txt', 'a+') as outfile:  
             outfile.write(f'{heating[i]}\n')
     print(f'{description} : Average loop b-field: {np.mean(gauss)}; length: {np.mean(length)/1e6}')
+    return gauss, length, heating
 
+gauss_closed, length_closed, heating_closed = get_ebtel_param(fline_list_closed,'closed')
+gauss_open, length_open, heating_open = get_ebtel_param(fline_list_open,'open')
 
-get_ebtel_param(fline_list_closed,'closed')
-get_ebtel_param(fline_list_open,'open')
+gauss_total = gauss_closed + gauss_open
+length_total = length_closed + length_open
+heating_total = heating_closed + heating_open
 
+for i in tqdm(range(len(gauss_total)), desc="combining two lists of EBTEL parameters"):
+    with open(date+f'mean_field_total.txt', 'a+') as outfile:  
+        outfile.write(f'{gauss_total[i]}\n')
+    with open(date+f'length_total.txt', 'a+') as outfile:  
+        outfile.write(f'{length_total[i]}\n')
+    with open(date+f'heating_total.txt', 'a+') as outfile:  
+        outfile.write(f'{heating_total[i]}\n')
