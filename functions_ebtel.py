@@ -6,6 +6,7 @@ from scipy.io import readsav
 import glob
 import re
 import sunpy
+import sys
 import multiprocessing as mp
 from functools import partial
 import json
@@ -88,11 +89,12 @@ def inf_check(date):
     return int_list
 
 if __name__ == "__main__":
-    date = '20110415/'
-    aia_submap = restore(date+'aia_submap')
-    eis_fixed = restore(date+'eis_map')
-    aia = restore(date+'aia_map')
-    pfss_in = restore(date+'pfss_in')
+    # date = '20110415/'
+    date = sys.argv[1]
+    aia_submap = restore(date+'m_aia_cutout.pickle')
+    # eis_fixed = restore(date+'eis_map')
+    aia = restore(date+'m_aia.pickle')
+    # pfss_in = restore(date+'pfss_in')
     """
     change this later - aia_submap to eis_fixed
     """
@@ -122,4 +124,4 @@ if __name__ == "__main__":
     #             failed_list.append(i)
 
     synth_map_multi = sunpy.map.Map(blank_data, aia_submap.meta)
-    save(date+'synth_eis', synth_map_multi)
+    save(date+'synth_map.pickle', synth_map_multi)
