@@ -26,7 +26,7 @@ def get_var(date_string, description):
     with open(date_string+f'heating_{description}.txt', "r") as f:
         heating = f.readlines()
         heating = [float(l.replace('\n','')) for l in heating]
-    flines = restore(date_string+'flines')
+    flines = restore(date_string+'flines.pickles')
     print('Order of variables: length, gauss, heating')
     print(f'List length of loop length: {len(length)}; Magnetic field: {len(gauss)}; Heating: {len(heating)}')
     
@@ -89,6 +89,9 @@ def inf_check(date):
     return int_list
 
 if __name__ == "__main__":
+    '''
+    calling statement: python functions_ebtel.py '20160520/'
+    '''
     # date = '20110415/'
     date = sys.argv[1]
     aia_submap = restore(date+'m_aia_cutout.pickle')
