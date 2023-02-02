@@ -64,9 +64,9 @@ def fline_multi(date_string, length, flines, aia_submap, file_list, i):
             dict = {'pix_x':pix_x, 'pix_y':pix_y, 'int':intensity}
             print(dict)
             # save(f'{date_string}simulated_intensities/{i}', dict)
-            # with open(f'{date_string}simulated_intensities/{i}', 'wb') as outp:  # Overwrites any existing file.
-            #     pickle.dump(dict, outp, pickle.HIGHEST_PROTOCOL)
-            # return pix_x, pix_y, intensity
+            with open(f'{date_string}simulated_intensities/{i}', 'wb') as outp:  # Overwrites any existing file.
+                pickle.dump(dict, outp, pickle.HIGHEST_PROTOCOL)
+            return pix_x, pix_y, intensity
         else:
             pass
     except:
@@ -111,8 +111,11 @@ if __name__ == "__main__":
     start=datetime.now()
     fline_partial = partial(fline_multi, date, length, flines, aia_submap, file_list_multi)
     print(f'Spreading process into multiple cores; Processing {len(flines)} fieldlines')
-    with mp.Pool(processes = 40) as p:
-        p.map(fline_partial, range(len(flines)))
+    for i in tqdm(range(len(flines))):
+        fline_partial(i)
+
+    # with mp.Pool(processes = 40) as p:
+    #     p.map(fline_partial, range(len(flines)))
     print(datetime.now()-start)
 
     print('Creating synthetic map')
