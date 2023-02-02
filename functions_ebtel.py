@@ -62,7 +62,8 @@ def fline_multi(date_string, length, flines, aia_submap, file_list, i):
             intensity = readsav(file_list[idl_index])['int'][445]
             print(i)
             dict = {'pix_x':pix_x, 'pix_y':pix_y, 'int':intensity}
-            save(f'{date_string}simulated_intensities/{i}', dict)
+            print(dict)
+            # save(f'{date_string}simulated_intensities/{i}', dict)
             # with open(f'{date_string}simulated_intensities/{i}', 'wb') as outp:  # Overwrites any existing file.
             #     pickle.dump(dict, outp, pickle.HIGHEST_PROTOCOL)
             # return pix_x, pix_y, intensity
