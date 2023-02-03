@@ -133,8 +133,8 @@ if __name__ == "__main__":
     #         except:
     #             failed_list.append(i)
     print('Saving syntheic map')
-    synth_map_multi = sunpy.map.Map(blank_data, aia_submap.meta)
-    save(date+'synth_map.pickle', synth_map_multi)
+    # synth_map_multi = sunpy.map.Map(blank_data, aia_submap.meta)
+    save(date+'synth_map_data.pickle', blank_data)
     print('Saved syntheic map')
     print(f'Total time used: {datetime.now()-start}')
     print(f'Synthetic map directory: {date+"synth_map.pickle"}')
