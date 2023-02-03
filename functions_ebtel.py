@@ -104,7 +104,8 @@ if __name__ == "__main__":
     """
     change this later - aia_submap to eis_fixed
     """
-    blank_data = np.zeros(len(aia_submap.data[0:])*len(aia_submap.data[0])).reshape(len(aia_submap.data[0:]),len(aia_submap.data[0])))
+    blank_data = np.zeros(len(aia_submap.data[0:])*len(aia_submap.data[0])).reshape(len(aia_submap.data[0:]),len(aia_submap.data[0]))
+    blank_data = np.zeros((1800, blank_data.shape[0], blank_data.shape[1]))
     length, gauss, heating, flines = get_var(date, 'total')
     file_list_multi = glob.glob(date+"simulation_results/*.sav")
     Path(f'{date}simulated_intensities/').mkdir(parents=True, exist_ok=True)
