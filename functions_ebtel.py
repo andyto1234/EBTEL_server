@@ -77,7 +77,7 @@ def synthetic_map(blank_array, date):
     for file in tqdm(files_intensity):
         dict = restore(file)
         for num, time in enumerate(dict['int']):
-            if dict['int'] != np.inf:
+            if time != np.inf:
                 blank_array[num][dict['pix_y'], dict['pix_x']] += time
             else:
                 blank_array[num][dict['pix_y'], dict['pix_x']] += 0
