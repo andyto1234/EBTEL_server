@@ -59,10 +59,10 @@ def fline_multi(date_string, length, flines, aia_submap, file_list, i):
         if length[i] > 5e6:
             idl_index = check_file(i, file_list)
             pix_x, pix_y = filter_pix(flines[i].coords, aia_submap)
-            intensity = readsav(file_list[idl_index])['int'][445]
-            print(i)
+            intensity = readsav(file_list[idl_index])['int']
+            # print(i)
             dict = {'pix_x':pix_x, 'pix_y':pix_y, 'int':intensity}
-            print(dict)
+            # print(dict)
             # save(f'{date_string}simulated_intensities/{i}', dict)
             with open(f'{date_string}simulated_intensities/{i}', 'wb') as outp:  # Overwrites any existing file.
                 pickle.dump(dict, outp, pickle.HIGHEST_PROTOCOL)
@@ -76,10 +76,11 @@ def synthetic_map(blank_array, date):
     files_intensity = glob.glob(date+"simulated_intensities/*")
     for file in tqdm(files_intensity):
         dict = restore(file)
-        if dict['int'] != np.inf:
-            blank_array[dict['pix_y'], dict['pix_x']] += dict['int']
-        else:
-            pass
+        for num, time in enumerate(dict['int']):
+            if dict['int'] != np.inf:
+                blank_array[num][dict['pix_y'], dict['pix_x']] += time
+            else:
+                blank_array[num][dict['pix_y'], dict['pix_x']] += 0
     return blank_array
 
 def inf_check(date):
@@ -103,7 +104,7 @@ if __name__ == "__main__":
     """
     change this later - aia_submap to eis_fixed
     """
-    blank_data = np.zeros(len(aia_submap.data[0:])*len(aia_submap.data[0])).reshape(len(aia_submap.data[0:]),len(aia_submap.data[0]))
+    blank_data = np.zeros(1800, (len(aia_submap.data[0:])*len(aia_submap.data[0])).reshape(len(aia_submap.data[0:]),len(aia_submap.data[0])))
     length, gauss, heating, flines = get_var(date, 'total')
     file_list_multi = glob.glob(date+"simulation_results/*.sav")
     Path(f'{date}simulated_intensities/').mkdir(parents=True, exist_ok=True)
@@ -116,7 +117,6 @@ if __name__ == "__main__":
 
     # with mp.Pool(processes = 40) as p:
     #     p.map(fline_partial, range(len(flines)))
-    print(datetime.now()-start)
 
     print('Creating synthetic map')
     blank_data = synthetic_map(blank_data, date)
@@ -135,3 +135,6 @@ if __name__ == "__main__":
     print('Saving syntheic map')
     synth_map_multi = sunpy.map.Map(blank_data, aia_submap.meta)
     save(date+'synth_map.pickle', synth_map_multi)
+    print('Saved syntheic map')
+    print(f'Total time used: {datetime.now()-start}')
+    print(f'Synthetic map directory: {date+"synth_map.pickle"}')
